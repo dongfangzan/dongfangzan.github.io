@@ -1,35 +1,51 @@
-[![](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/wild-flame)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kronik3r/daktilo/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
-# jekyll-simple
+# Daktilo
+Daktilo is a [Jekyll](jekyllrb.com) theme with a minimal design inspired from typewriters.
 
-## simple
-simple is a theme designed for blogger using static site generator like jekyll, Hexo etc.
+# More info and Live preview
+[Click here](http://daktilo.github.io/) to see the theme in action.
 
-Especially for those who writes in both Chinese and English. The font-type setting looks really good when writers use Chinese mixed with English.
+# Features
+- Fully responsive
+- [Disqus](https://disqus.com/) integration for comments.
+- Google Analytics integration.
+- Syntax Highlighter (using [highlight.js](https://highlightjs.org/)).
+- Support for categories.
+- Font-Awesome Icons.
+- Optimized for SEO.
+- Coolest [404 page ever](http://kronik3r.github.io/daktilo/404.html).
 
-Supposedly, this could work with Japanese as well but never had a chance to try.
+# How to use it
+Start by cloning the repository, then check the `_config.yml` file and change it accordingly.
+Note that the `title` property is what will be displayed as logo.
 
-## Story behind this theme
+Finally execute `jekyll serve --watch` and head to [localhost:4000](http://127.0.0.1:4000) to see the result.
 
-It has been long that using font with Chinese in web was a tedious and time-consuming work. It would be almost impossible to make different OS or devices to look the same.
+# Using categories
+Categories are little bit tricky. Please make sure to do the following for each category:
 
-iOS 9 has pulished some new fonts in Chinese and I decided to make one theme that looks good on iOS devices, at the same time, making it acceptable on computers using other fonts.
+- Create a file within `categories` folder with the name of your category
+For example let's say that we have a category called `An Awesome Category` you will need to add an `an-awesome-category.html` file with this content:
 
-So mobile goes first, then the macOS.
+``` html
+---
+layout: category
+category: an-awesome-category
+permalink: /categories/an-awesome-category/
+---
 
-## ^-^
+```
 
-You can click the button [Say Thanks!](https://saythanks.io/to/wild-flame) at the first of README if you use/like my project. :D
+- Create an entry inside `_data/categories.yml`
 
-Thanks you guys, I got a lot of thanks from people.
+``` html
+- slug: an-awesome-category
+  name: An Awesome Category
+```
 
-- [ryan](https://saythanks.io/note/a9a342ba-e9aa-4707-b169-05b6ae49757d)
-- [Daniel Moore](https://saythanks.io/note/da81706c-8884-4dbc-89b0-eed242ac3b19) and feel free to visit his work [border quiz](http://danielmoore.us/borders-quiz?singapore-planning-areas)
-- [David Laing](https://saythanks.io/note/fb5d24eb-3be8-4f92-842b-c6dd7ce4c239)
-- [Meg](https://saythanks.io/note/6d56e228-e17c-4641-9524-9f9fd6205068)
+- Then you will see it in the footer in the `Explore` section.
 
-![image](https://user-images.githubusercontent.com/4491950/53502929-0d375880-3aea-11e9-9ce1-13eba2ec4643.png)
+# License
 
-- And more
-
-![image](https://user-images.githubusercontent.com/4491950/53502875-e1b46e00-3ae9-11e9-97e4-d70d038a36e9.png)
+The contents of this repository is licensed under [The MIT License.](https://opensource.org/licenses/MIT)
