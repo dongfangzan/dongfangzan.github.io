@@ -1,69 +1,83 @@
-var gulp = require('gulp');
+// Script: gulpfile.js
+// by: William C. Canin
 
-// gulp plugins and utils
-var gutil = require('gulp-util');
-var livereload = require('gulp-livereload');
-var postcss = require('gulp-postcss');
-var sourcemaps = require('gulp-sourcemaps');
-var zip = require('gulp-zip');
+let gulp = require('gulp');
+let uglify = require('gulp-uglify');
+let imagemin = require('gulp-imagemin');
+let htmlmin = require('gulp-htmlmin');
+let del = require('del');
 
-// postcss plugins
-var autoprefixer = require('autoprefixer');
-var colorFunction = require('postcss-color-function');
-var cssnano = require('cssnano');
-var customProperties = require('postcss-custom-properties');
-var easyimport = require('postcss-easy-import');
 
-var swallowError = function swallowError(error) {
-    gutil.log(error.toString());
-    gutil.beep();
-    this.emit('end');
-};
+// function clean objects caches
+function clean_objects() {
+  var objs = [
+    'node_modules',
+    'vendor',
+    'package-lock.json',
+    'Gemfile.lock'
+  ]
+  return del(objs)
+}
 
-var nodemonServerInit = function () {
-    livereload.listen(1234);
-};
+// function postinstall for copy files statics
+function postinstall_statics() {
+  return gulp
+    .src(['node_modules/jquery/dist/jquery.min.js',
+      'node_modules/popper.js/dist/umd/popper.min.js',
+      'node_modules/popper.js/dist/umd/popper.min.js.map',
+      'node_modules/bootstrap/dist/js/bootstrap.min.js',
+      'node_modules/bootstrap/dist/js/bootstrap.min.js.map'])
+    .pipe(gulp.dest('assets/vendor/js'))
+}
 
-gulp.task('build', ['css'], function (/* cb */) {
-    return nodemonServerInit();
-});
+// function minify javascripts
+function javascripts() {
+  return gulp
+    .src('public/assets/js/**/*.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('public/assets/js'))
+}
 
-gulp.task('css', function () {
-    var processors = [
-        easyimport,
-        customProperties,
-        colorFunction(),
-        autoprefixer({browsers: ['last 2 versions']}),
-        cssnano()
-    ];
+// function minify html
+function html_minify() {
+  return gulp
+    .src('public/**/*.html')
+    .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
+    .pipe(gulp.dest('public'))
+}
 
-    return gulp.src('assets/css/*.css')
-        .on('error', swallowError)
-        .pipe(sourcemaps.init())
-        .pipe(postcss(processors))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('assets/built/'))
-        .pipe(livereload());
-});
+// function optimize images
+function images_minify() {
+  return gulp
+    .src('public/assets/images/**/*')
+    .pipe(
+      imagemin([
+        imagemin.gifsicle({ interlaced: true }),
+        imagemin.mozjpeg({ progressive: true }),
+        imagemin.optipng({ optimizationLevel: 5 }),
+        imagemin.svgo({
+          plugins: [
+            {
+              removeViewBox: true,
+              collapseGroups: false
+            }
+          ]
+        })
+      ])
+    )
+    .pipe(gulp.dest('public/assets/images'));
+}
 
-gulp.task('watch', function () {
-    gulp.watch('assets/css/**', ['css']);
-});
+// task build
+const build = gulp.series(gulp.parallel(html_minify,
+                                        javascripts,
+                                        images_minify));
 
-gulp.task('zip', ['css'], function() {
-    var targetDir = 'dist/';
-    var themeName = require('./package.json').name;
-    var filename = themeName + '.zip';
-
-    return gulp.src([
-        '**',
-        '!node_modules', '!node_modules/**',
-        '!dist', '!dist/**'
-    ])
-        .pipe(zip(filename))
-        .pipe(gulp.dest(targetDir));
-});
-
-gulp.task('default', ['build'], function () {
-    gulp.start('watch');
-});
+// export tasks
+exports.postinstall = postinstall_statics;
+exports.images = images_minify;
+exports.js = javascripts;
+exports.html = html_minify;
+exports.build = build;
+exports.clean = clean_objects;
+exports.default = build;

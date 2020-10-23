@@ -1,80 +1,76 @@
-#############################################################################
-#
-# Modified version of jekyllrb Rakefile
-# https://github.com/jekyll/jekyll/blob/master/Rakefile
-#
-#############################################################################
+# File name: Rakefile
+# Stript type: Rake
+# Country/State: Brazil/SP
+# Author : William C. Canin
+# Page author: http://williamcanin.me
+# Description: Task creation file for the 'manager.rb' file.
 
-require 'rake'
-require 'date'
-require 'yaml'
+require "./_src/lib/rb/manager.rb"
 
-CONFIG = YAML.load(File.read('_config.yml'))
-USERNAME = CONFIG["username"]
-REPO = CONFIG["repo"]
-SOURCE_BRANCH = CONFIG["branch"]
-DESTINATION_BRANCH = "gh-pages"
-CNAME = CONFIG["CNAME"]
+# Instance class
+manager = Manager.new
 
-def check_destination
-  unless Dir.exist? CONFIG["destination"]
-    sh "git clone https://$GIT_NAME:$GH_TOKEN@github.com/#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
-  end
+# Task create header post
+# Example: rake post
+desc "Create new post"
+task :post do
+  manager.post_create
 end
 
-namespace :site do
-  desc "Generate the site"
-  task :build do
-    check_destination
-    sh "bundle exec jekyll build"
+# Task create header page
+# Example: rake page
+desc "Create new page"
+task :page do
+  manager.page_create
+end
+
+# # DEPRECATED!
+# # Task to set up after installation
+# # Example: rake postinstall
+# desc "Setup after installation"
+# task :postinstall do
+#   manager.postinstall
+# end
+
+# # UNDER DEVELOPMENT
+# # Task to set up before installation
+# # Example: rake preinstall
+# desc "Setup before installation"
+# task :preinstall do
+#   manager.preinstall
+# end
+
+# UNDER DEVELOPMENT
+## Task to deploy the compiled project
+## Example: rake deploy:public
+# desc "Deploy the compiled project"
+# namespace :deploy do
+#   task :public do
+#     manager.deploy('public', 'public')
+#   end
+# end
+
+# UNDER DEVELOPMENT
+## Task to deploy the project source.
+## Example: rake deploy:source
+# desc "Deploy the project source"
+# namespace :deploy do
+#   task :source do
+#     manager.deploy('.', 'src')
+#   end
+# end
+
+# Other outputs
+def get_stdin(message)
+  print message
+  STDIN.gets.chomp
+end
+
+def ask(message, valid_options)
+  if valid_options
+    answer = get_stdin("#{message} #{valid_options.to_s.gsub(/"/, '').gsub(/, /,'/')} ") while !valid_options.include?(answer)
+  else
+    answer = get_stdin(message)
   end
-
-  desc "Generate the site and serve locally"
-  task :serve do
-    check_destination
-    sh "bundle exec jekyll serve"
-  end
-
-  desc "Generate the site, serve locally and watch for changes"
-  task :watch do
-    sh "bundle exec jekyll serve --watch"
-  end
-
-  desc "Generate the site and push changes to remote origin"
-  task :deploy do
-    # Detect pull request
-    if ENV['TRAVIS_PULL_REQUEST'].to_s.to_i > 0
-      puts 'Pull request detected. Not proceeding with deploy.'
-      exit
-    end
-
-    # Configure git if this is run in Travis CI
-    if ENV["TRAVIS"]
-      sh "git config --global user.name $GIT_NAME"
-      sh "git config --global user.email $GIT_EMAIL"
-      sh "git config --global push.default simple"
-    end
-
-    # Make sure destination folder exists as git repo
-    check_destination
-
-    sh "git checkout #{SOURCE_BRANCH}"
-    Dir.chdir(CONFIG["destination"]) { sh "git checkout #{DESTINATION_BRANCH}" }
-
-    # Generate the site
-    sh "bundle exec jekyll build"
-
-    # Commit and push to github
-    sha = `git log`.match(/[a-z0-9]{40}/)[0]
-    Dir.chdir(CONFIG["destination"]) do
-      # check if there is anything to add and commit, and pushes it
-      sh "if [ -n '$(git status)' ]; then
-            echo '#{CNAME}' > ./CNAME;
-            git add --all .;
-            git commit -m 'Updating to #{USERNAME}/#{REPO}@#{sha}.';
-            git push --quiet origin #{DESTINATION_BRANCH};
-         fi"
-      puts "Pushed updated branch #{DESTINATION_BRANCH} to GitHub Pages"
-    end
-  end
+  answer
 end
