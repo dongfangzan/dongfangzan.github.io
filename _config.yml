@@ -1,5 +1,5 @@
 # Site settings
-title: 东方赞
+title: 东方赞的世外桃源
 description: >
   软件工程师，技杂，谦虚谨慎，愿像海绵一样吸收知识。现涉猎云计算，工作常用java，也曾习C++、C#、python、golang、php等。
 
@@ -7,7 +7,7 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://hitchhiker.ma" # the base hostname & protocol for your site
 
 author:
-  fullname: Siyuan Zhang
+  fullname: 东方赞
   googleplus: https://www.google.com/+MotaquillahMaddane
   github: dongfangzan
   # twitter: electrik_frog
