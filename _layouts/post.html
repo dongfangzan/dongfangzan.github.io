@@ -37,17 +37,23 @@ layout: default
       powered by Disqus.</a></noscript>
   {%- endif -%}
 </div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/md5@2.3.0/dist/md5.min.js"></script>
-  <script>
-    const gitalk = new Gitalk({
-      clientID: 'e51a158a8f5cb8110a62',
-      clientSecret: '072c4fe44d0b61425f688b459b13ffe0221b54d4',
-      repo: 'blogtalk',
-      owner: 'dongfangzan',
-      admin: ['dongfangzan'],
-      id: MD5(location.pathname),
-      distractionFreeMode: false
-    })
-  </script>
+<div>
+  <!-- {% if site.comments.gitalk %} -->
+  <section class="post-footer-item comment">
+  <div id="gitalk_container"></div>
+  <div id="disqus_thread"></div>
+  </section>
+  <!-- {% endif %} -->
+</div>
+
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'e51a158a8f5cb8110a62',
+    clientSecret: '072c4fe44d0b61425f688b459b13ffe0221b54d4',
+    repo: 'blogtalk',
+    owner: 'dongfangzan',
+    admin: ['dongfangzan'],
+    id: MD5(location.pathname),
+    distractionFreeMode: false
+  })
+</script>
