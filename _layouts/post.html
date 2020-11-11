@@ -37,3 +37,16 @@ layout: default
       powered by Disqus.</a></noscript>
   {%- endif -%}
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/md5@2.3.0/dist/md5.min.js"></script>
+  <script>
+    const gitalk = new Gitalk({
+      clientID: 'e51a158a8f5cb8110a62',
+      clientSecret: '072c4fe44d0b61425f688b459b13ffe0221b54d4',
+      repo: 'gitalk-comment',
+      owner: 'dev2007',
+      admin: ['dev2007'],
+      id: MD5(location.pathname),
+      distractionFreeMode: false
+    })
+  </script>
