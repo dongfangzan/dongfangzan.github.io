@@ -37,23 +37,3 @@ layout: default
       powered by Disqus.</a></noscript>
   {%- endif -%}
 </div>
-<div>
-  <!-- {% if site.comments.gitalk %} -->
-  <section class="post-footer-item comment">
-  <div id="gitalk_container"></div>
-  <div id="disqus_thread"></div>
-  </section>
-  <!-- {% endif %} -->
-</div>
-
-<script>
-  const gitalk = new Gitalk({
-    clientID: 'e51a158a8f5cb8110a62',
-    clientSecret: '072c4fe44d0b61425f688b459b13ffe0221b54d4',
-    repo: 'blogtalk',
-    owner: 'dongfangzan',
-    admin: ['dongfangzan'],
-    id: MD5(location.pathname),
-    distractionFreeMode: false
-  })
-</script>
